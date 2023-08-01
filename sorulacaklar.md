@@ -1,0 +1,2 @@
+# enableScreens() fonksiyonu.
+# lineargradient fonksiyonu 
