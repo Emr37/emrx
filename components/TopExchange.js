@@ -10,7 +10,7 @@ function TopExchange({ usd, eur}) {
         colors={['#000009', '#0079FF']}
         style={styles.container}>
             <View style={styles.title}>
-                <View style={styles.iconContianer}>
+                <View style={styles.iconContainer}>
                     <MoneyIcons size="64" color="#222" name={usd?.symbol} stroke="#fff" />
                 </View>
                 <Text style={styles.symbol}>{usd?.symbol}</Text>
@@ -31,7 +31,7 @@ function TopExchange({ usd, eur}) {
         colors={['#000009', '#0079FF']}
         style={styles.container}>
             <View style={styles.title}>
-                <View style={styles.iconContianer}>
+                <View style={styles.iconContainer}>
                     <MoneyIcons size="64" color="#222" name={eur?.symbol} stroke="#fff" />
                 </View>
                 <Text style={styles.symbol}>{eur?.symbol}</Text>
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
         height: 48,
         paddingLeft: 72
     },
-    iconContianer: {
+    iconContainer: {
         position: 'absolute',
         width: 72,
         height: 72,
@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
         color: '#fff',
     },
     name: {
-        fontSize: 14,
+        fontSize: 12,
         color: '#fff',
         width: '100%',
         textAlign: 'center'

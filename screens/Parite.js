@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import { View, TouchableOpacity, FlatList, StyleSheet, ActivityIndicator } from 'react-native'
+import { View, TouchableOpacity, FlatList, StyleSheet, Text } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { getExchange } from '../service';
@@ -13,9 +13,12 @@ import PariteDetail from '../components/PariteDetail';
 const PariteScreen = () => {
   const {navigate} = useNavigation();
   const [list, setList] = useState([]);
-  const [num, setNum] = useState('');
+  const [parity, setParity] = useState('');
+  const [buyToTurkish, setBuyToTurkish]= useState(0);
+  const [sellToTurkish, setSellToTurkish]= useState(0);
 
-  
+  const [num, setNum] = useState(0);
+
   const getData = async () => {
     const res = await getExchange();
 
@@ -27,6 +30,7 @@ const PariteScreen = () => {
       }));
       AsyncStorage.setItem('exchange', JSON.stringify(newList));
       setList(newList);
+
     }
     else {
       const data = await AsyncStorage.getItem('exchange');
@@ -38,6 +42,7 @@ const PariteScreen = () => {
 
   useEffect(() => {
     getData();
+
   }, []);
  
 
@@ -51,15 +56,19 @@ const PariteScreen = () => {
           <TouchableOpacity style={styles.back} onPress={() => navigate('Main')}>
             <BackIcon size="32" />
           </TouchableOpacity>
+
+          <Text>Alış</Text>
+          <Text>{formatMoney(buyToTurkish)} TL</Text>
+          <Text>Satış</Text>
+          <Text>{formatMoney(sellToTurkish)} TL</Text>
+
         </View>
         <View style={styles.exchangeContianer}>
-          
-         
-          
+                 
           <FlatList
             data={list}
             style={{ width: '100%' }}
-            renderItem={({ item }) => <PariteDetail data={item} num={num} setNum={setNum}/>} /* Burada lifting state up uygulandı. */
+            renderItem={({ item }) => <PariteDetail data={item} parity={parity} setParity={setParity} num={num} setNum={setNum} setBuyToTurkish={setBuyToTurkish} setSellToTurkish={setSellToTurkish} />} /* Burada lifting state up uygulandı. */
             keyExtractor={item => item.symbol}
           />
             

@@ -1,9 +1,8 @@
 import { View, Text, StyleSheet, Image, TextInput } from 'react-native'
+import { formatMoney } from '../utils/money'
 
-const PariteDetail = ({ data, num, setNum }) => {
-
-    const newList = { ...data, exchange: num };
-
+const PariteDetail = ({ data, num, setNum, parity, setParity, setBuyToTurkish, setSellToTurkish}) => {
+let par = (parity/data.sales).toFixed(0);
 
     return (
         <View style={styles.container}>
@@ -22,14 +21,24 @@ const PariteDetail = ({ data, num, setNum }) => {
                 <Text style={styles.price}>{data.sales}</Text>
             </View>
             <View style={styles.exchange}>
-                <Text style={styles.text}>{newList.exchange}</Text>
+                <Text style={styles.text}>Parite</Text>
                 <TextInput
-                    value={num}
-                    onChangeText={(e) => setNum(e)}
-                    placeholder={newList.exchange}
-                    keyboardType={'number-pad'}
-                    type='number'
+                    style={styles.price}
+                    value={par == 0 ? '' : String(par)}
+                    onChangeText={(e) => {
+                        setParity(e*data.sales);
+                        setBuyToTurkish(e*data.buying);
+                        setSellToTurkish(e*data.sales);
 
+                        setNum(e);
+                    }}
+                    
+                    onPressIn={() => setParity('')}
+                    
+                    keyboardType='number-pad'
+                    
+                    
+                    
                 />
             </View>
         </View>
@@ -68,24 +77,26 @@ const styles = StyleSheet.create({
     symbol: {
         fontSize: 21,
         fontWeight: '700',
-        marginBottom: 4,
-    },
-    name: {
-        fontSize: 12,
     },
     exchange: {
-        marginHorizontal: 2,
+        marginHorizontal: 4,
         justifyContent: 'center',
         alignItems: 'center',
-        width: 72
+        width: 72,
+        height: 'auto',
     },
     text: {
         fontSize: 14,
         fontWeight: '700',
-        marginBottom: 8,
+        marginBottom: 1,
+        alignItems:'center',
+        justifyContent:'space-between'
+
     },
     price: {
         fontSize: 14,
-        fontWeight: '300',
+        fontWeight: '500',
+        textAlign: 'center',
+        height: 18
     }
 });

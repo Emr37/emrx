@@ -12,10 +12,13 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { formatMoney } from '../utils/money';
 import { AboutIcon, HomeIcon, SettingIcon, ContactIcon, CalcIcon } from '../constants/icons';
 import { useNavigation } from '@react-navigation/native';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const { width, height } = Dimensions.get('window');
 
 export default function MainScreen() {
+  const [loading, setLoading] = useState(false);
+
   const insets = useSafeAreaInsets()
   const { navigate } = useNavigation();
   const [list, setList] = useState([]);
@@ -23,7 +26,7 @@ export default function MainScreen() {
   const getData = async () => {
     const res = await getExchange();
 
-    if(res.data.length > 0) {
+    if (res.data.length > 0) {
       const newList = res.data.map(item => ({
         ...item,
         buying: formatMoney(item.buying),
@@ -34,7 +37,7 @@ export default function MainScreen() {
     }
     else {
       const data = await AsyncStorage.getItem('exchange');
-      if(data) {
+      if (data) {
         setList(JSON.parse(data));
       }
     }
@@ -43,58 +46,70 @@ export default function MainScreen() {
   useEffect(() => {
     getData();
   }, []);
-  
+
   return (
 
-      <View style={[styles.container, { marginTop: insets.top + 12}]}>
-        <StatusBar style="auto" />
-        <View style={styles.context}>
-          <View style={{ position: 'absolute', opacity: 0.3, top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center'}}>
-            <Eur size={width} color="gold"/>
-          </View>
-          {
-            list.length === 0 ? <Text>Yükleniyor...</Text> : 
+    <View style={[styles.container, { marginTop: insets.top + 12 }]}>
+      <StatusBar style="auto" />
+      <View style={styles.context}>
+        <View style={{ position: 'absolute', opacity: 0.3, top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center' }}>
+          <Eur size={width} color="gold" />
+        </View>
+        {
+          list.length === 0
+            ?
+            <Spinner
+              visible={true}
+              textContent={'Yükleniyor...'}
+              textStyle={styles.spinnerTextStyle}
+            />
+            :
             <>
-          <TopExchange eur={list[1]} usd={list[0]}  />
-          <Parite eur={list[1]} usd={list[0]}/>
-          <FlatList
-            data={list.slice(2)}
-            style={{ width: '100%' }}
-            renderItem={({ item }) => <Exchange data={item} />}
-            keyExtractor={item => item.symbol}
-          />
-          </>
-          }
-        </View>
-        <View style={[styles.footerContainer, { paddingBottom: insets.bottom, height: 52 + insets.bottom}]}>
-          <TouchableOpacity onPress={() => navigate('Settings')}>
-            <View style={styles.button}>
-              <SettingIcon size="32"/>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigate('About')}>
-            <View style={styles.button}>
-              <AboutIcon size="32"/>
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => navigate('Main')}>
-            <View style={styles.button}>
-              <HomeIcon size="48"/>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigate('Contact')}>
-            <View style={styles.button}>
-              <ContactIcon size="32"/>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigate('Calc')}>
-            <View style={styles.button}>
-              <CalcIcon size="32"/>
-            </View>
-          </TouchableOpacity>
-        </View>
+              <Spinner
+                visible={false}
+                textContent={'Yükleniyor...'}
+                textStyle={styles.spinnerTextStyle}
+              />
+              <TopExchange eur={list[1]} usd={list[0]} />
+              <Parite eur={list[1]} usd={list[0]} />
+              <FlatList
+                data={list.slice(2)}
+                style={{ width: '100%' }}
+                renderItem={({ item }) => <Exchange data={item} />}
+                keyExtractor={item => item.symbol}
+              />
+            </>
+        }
       </View>
+      <View style={[styles.footerContainer, { paddingBottom: insets.bottom, height: 52 + insets.bottom }]}>
+        <TouchableOpacity onPress={() => navigate('Settings')}>
+          <View style={styles.button}>
+            <SettingIcon size="32" />
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigate('About')}>
+          <View style={styles.button}>
+            <AboutIcon size="32" />
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => navigate('Main')}>
+          <View style={styles.button}>
+            <HomeIcon size="48" />
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigate('Contact')}>
+          <View style={styles.button}>
+            <ContactIcon size="32" />
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigate('Calc')}>
+          <View style={styles.button}>
+            <CalcIcon size="32" />
+          </View>
+        </TouchableOpacity>
+      </View>
+    </View>
   );
 }
 
@@ -124,5 +139,9 @@ const styles = StyleSheet.create({
     width: width / 5,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  spinnerTextStyle: {
+    color: '#FFF',
+
   }
 });
