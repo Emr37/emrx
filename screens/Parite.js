@@ -118,7 +118,6 @@ const styles = StyleSheet.create({
   },
   exchangeContianer: {
     flex: 1,
-    padding: 16
   },
   exchage: {
     flexDirection: 'row',

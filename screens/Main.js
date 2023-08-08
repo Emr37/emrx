@@ -24,10 +24,11 @@ export default function MainScreen() {
   const [list, setList] = useState([]);
 
   const getData = async () => {
+    setLoading(true);
     const res = await getExchange();
 
-    if (res.data.length > 0) {
-      const newList = res.data.map(item => ({
+    if (res.success) {
+      const newList = res.data.data.map(item => ({
         ...item,
         buying: formatMoney(item.buying),
         sales: formatMoney(item.sales)
@@ -41,6 +42,7 @@ export default function MainScreen() {
         setList(JSON.parse(data));
       }
     }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -56,7 +58,7 @@ export default function MainScreen() {
           <Eur size={width} color="gold" />
         </View>
         {
-          list.length === 0
+          loading
             ?
             <Spinner
               visible={true}

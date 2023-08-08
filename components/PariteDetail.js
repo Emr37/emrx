@@ -1,8 +1,7 @@
 import { View, Text, StyleSheet, Image, TextInput } from 'react-native'
-import { formatMoney } from '../utils/money'
 
 const PariteDetail = ({ data, num, setNum, parity, setParity, setBuyToTurkish, setSellToTurkish}) => {
-let par = (parity/data.sales).toFixed(0);
+let par = (parity/data.sales).toFixed(4);
 
     return (
         <View style={styles.container}>
@@ -23,18 +22,15 @@ let par = (parity/data.sales).toFixed(0);
             <View style={styles.exchange}>
                 <Text style={styles.text}>Parite</Text>
                 <TextInput
-                    style={styles.price}
+                    style={[styles.price, styles.parite]}
                     value={par == 0 ? '' : String(par)}
                     onChangeText={(e) => {
                         setParity(e*data.sales);
-                        setBuyToTurkish(e*data.buying);
                         setSellToTurkish(e*data.sales);
-
+                        setBuyToTurkish(e*data.buying);
                         setNum(e);
-                    }}
-                    
-                    onPressIn={() => setParity('')}
-                    
+                    }}                    
+                    onPressIn={() => setParity('')}                    
                     keyboardType='number-pad'
                     
                     
@@ -50,7 +46,7 @@ export default PariteDetail;
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
-        marginHorizontal: 8,
+        marginHorizontal: 16,
         borderBottomColor: '#aaa',
         borderBottomWidth: 1,
         paddingVertical: 8,
@@ -97,6 +93,17 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: '500',
         textAlign: 'center',
-        height: 18
+        height: 18,
+        
+    },
+    parite: {
+        width:'100%',
+        height: 32,
+        borderWidth:1,
+        borderColor:'#999',
+        textAlign:'right',
+        paddingHorizontal:8
     }
+    
+
 });

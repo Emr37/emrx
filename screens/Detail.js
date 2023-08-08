@@ -14,8 +14,8 @@ const DetailScreen = ({ navigation, route }) => {
   const getData = async() => {
     setLoading(true);
     const res = await getExchangeDetail(route.params.symbol);
-    if(res) {
-      setData(res);
+    if(res.success) {
+      setData(res.data);
     }
     setLoading(false);
   };
