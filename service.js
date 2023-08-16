@@ -1,56 +1,84 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { get, post, noTokenApi, api } from "./constants/config/axios";
+import { get, post, noTokenApi, api, put } from "./constants/config/axios";
 
-const apiURL = {
-    exchange: "/exchanges",
-    exchangeDetail: "/exchanges/",
-}
+export const apiURL = {
+  exchange: "/exchanges",
+  exchangeDetail: "/exchanges/",
+  update: "/users/",
+};
 
 const noTokenApiURL = {
-    login: "/auth/local",
-    register: "/auth/local/register"
-}
+  login: "/auth/local",
+  register: "/auth/local/register",
+};
 
 const getExchange = async () => await get(apiURL.exchange);
 
-const getExchangeDetail = async symbol => await get(apiURL.exchangeDetail + symbol);
+const getExchangeDetail = async (symbol) =>
+  await get(apiURL.exchangeDetail + symbol);
 
 const loginService = async (data) => {
-    const response = await noTokenApi.post(noTokenApiURL.login, data);
+  const response = await post(noTokenApiURL.login, data);
 
-    if(response.status === 200) {
-        const jwt = response.data.jwt;
-        api.defaults.headers.common['Authorization'] = `Bearer ${jwt}`;
+  if (response.success) {
+    const jwt = response.data.jwt;
+    api.defaults.headers.common["Authorization"] = `Bearer ${jwt}`;
 
-        AsyncStorage.setItem('jwt', jwt);
-        AsyncStorage.setItem('user', JSON.stringify(response.data.user));
+    AsyncStorage.setItem("jwt", jwt);
+    AsyncStorage.setItem("user", JSON.stringify(response.data.user));
 
-        return {
-            status: true,
-            user: response.data.user
-        };
-    }
-    else {
-        return { status: false, error: 'Hatalı kullanıcı adı veya şifre' };
-    }
+    console.log(jwt);
 
+    return {
+      status: true,
+      user: response.data.user,
+    };
+  } else {
+    return { status: false, error: "Hatalı kullanıcı adı veya şifre" };
+  }
 };
 
 const registerService = async (data) => {
-    const response = await noTokenApi.post(noTokenApiURL.register, data);
+  console.log("RS---", data);
+  const response = await noTokenApi.post(noTokenApiURL.register, data);
 
-    if(response.status === 200) {
-        const jwt = response.data.jwt;
-        api.defaults.headers.common['Authorization'] = `Bearer ${jwt}`;
+  console.log("RS---", response);
+  console.log("RS---s", response.success);
+  console.log("RS---d", response.data);
+  console.log("RS---d.user", response.data.user);
 
-        AsyncStorage.setItem('jwt', jwt);
-        AsyncStorage.setItem('user', JSON.stringify(response.data.user));
+  if (response.status === 200) {
+    const jwt = response.data.jwt;
+    api.defaults.headers.common["Authorization"] = `Bearer ${jwt}`;
 
-        return response.data.user;
-    }
-    else {
-        return 'Hatalı kullanıcı adı veya şifre';
-    }
-}
+    AsyncStorage.setItem("jwt", jwt);
+    AsyncStorage.setItem("user", JSON.stringify(response.data.user));
 
-export { getExchange, getExchangeDetail, loginService, registerService };
+    return response.data.user;
+  } else {
+    return "Kullanıcı adı veya şifresi hatalı";
+  }
+};
+
+const updateService = async (data) => {
+  const response = await put(apiURL.update + data.id, data);
+  //burada hata yapmışım
+  if (response.success) {
+    AsyncStorage.setItem("user", JSON.stringify(response.data));
+
+    return {
+      status: true,
+      user: response.data,
+    };
+  } else {
+    return { status: false, error: "Kullanıcı Hatası" };
+  }
+};
+
+export {
+  getExchange,
+  getExchangeDetail,
+  loginService,
+  registerService,
+  updateService,
+};

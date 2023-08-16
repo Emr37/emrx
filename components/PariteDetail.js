@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, Image, TextInput } from 'react-native'
 
 const PariteDetail = ({ data, num, setNum, parity, setParity, setBuyToTurkish, setSellToTurkish}) => {
-let par = (parity/data.sales).toFixed(4);
+let par = (parity/data.sales).toFixed(0);
 
     return (
         <View style={styles.container}>
@@ -20,9 +20,8 @@ let par = (parity/data.sales).toFixed(4);
                 <Text style={styles.price}>{data.sales}</Text>
             </View>
             <View style={styles.exchange}>
-                <Text style={styles.text}>Parite</Text>
                 <TextInput
-                    style={[styles.price, styles.parite]}
+                    style={[styles.price, styles.parite, {fontSize: 16}]}
                     value={par == 0 ? '' : String(par)}
                     onChangeText={(e) => {
                         setParity(e*data.sales);
@@ -32,6 +31,7 @@ let par = (parity/data.sales).toFixed(4);
                     }}                    
                     onPressIn={() => setParity('')}                    
                     keyboardType='number-pad'
+                    placeholder='parite'
                     
                     
                     
@@ -98,11 +98,11 @@ const styles = StyleSheet.create({
     },
     parite: {
         width:'100%',
-        height: 32,
-        borderWidth:1,
+        height: 42,
+        borderWidth:2,
         borderColor:'#999',
-        textAlign:'right',
-        paddingHorizontal:8
+        textAlign:'center',
+        padding:8
     }
     
 

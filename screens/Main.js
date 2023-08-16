@@ -10,11 +10,13 @@ import Parite from '../components/Parite';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { formatMoney } from '../utils/money';
-import { AboutIcon, HomeIcon, SettingIcon, ContactIcon, CalcIcon } from '../constants/icons';
 import { useNavigation } from '@react-navigation/native';
+
 import Spinner from 'react-native-loading-spinner-overlay';
 
 const { width, height } = Dimensions.get('window');
+
+
 
 export default function MainScreen() {
   const [loading, setLoading] = useState(false);
@@ -83,34 +85,7 @@ export default function MainScreen() {
             </>
         }
       </View>
-      <View style={[styles.footerContainer, { paddingBottom: insets.bottom, height: 52 + insets.bottom }]}>
-        <TouchableOpacity onPress={() => navigate('Settings')}>
-          <View style={styles.button}>
-            <SettingIcon size="32" />
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigate('About')}>
-          <View style={styles.button}>
-            <AboutIcon size="32" />
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={() => navigate('Main')}>
-          <View style={styles.button}>
-            <HomeIcon size="48" />
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigate('Contact')}>
-          <View style={styles.button}>
-            <ContactIcon size="32" />
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigate('Calc')}>
-          <View style={styles.button}>
-            <CalcIcon size="32" />
-          </View>
-        </TouchableOpacity>
-      </View>
+      
     </View>
   );
 }
@@ -127,14 +102,6 @@ const styles = StyleSheet.create({
     height,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  footerContainer: {
-    width: '100%',
-    backgroundColor: '#fff',
-    flexDirection: 'row',
-    paddingTop: 4,
-    borderTopColor: '#ddd',
-    borderTopWidth: 1
   },
   button: {
     height: 48,

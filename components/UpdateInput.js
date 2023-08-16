@@ -9,7 +9,7 @@ import React, { useState } from "react";
 import SecureIcon from "../constants/icons/secure";
 import NoSecureIcon from "../constants/icons/noSecure";
 
-const LoginInput = ({
+const UpdateInput = ({
   setValue,
   value,
   leftIcon,
@@ -18,21 +18,26 @@ const LoginInput = ({
   placeholder,
   lowerCase = false,
   error,
+  label,
 }) => {
   const [isShow, setIsShow] = useState(true);
 
   return (
     <View style={styles.inputContianer}>
+      <Text style={styles.label}>{label}</Text>
+
       <View
         style={[styles.contianer, error && { borderBottomColor: "#ff0000" }]}
       >
         {leftIcon && leftIcon}
         <TextInput
-          autoCapitalize={"none"}
+          autoCapitalize="none"
           secureTextEntry={isShow ? secure : false}
           placeholderTextColor={"#D9EBFD"}
           value={value}
-          onChangeText={(text) => setValue(text)}
+          onChangeText={(text) =>
+            setValue(lowerCase ? text.toLocaleLowerCase() : text)
+          }
           style={[
             styles.input,
             error && { color: "#ff0000" },
@@ -61,7 +66,7 @@ const LoginInput = ({
   );
 };
 
-export default LoginInput;
+export default UpdateInput;
 
 const styles = StyleSheet.create({
   inputContianer: {
@@ -95,5 +100,11 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: 0,
     top: 3,
+  },
+
+  label: {
+    width: "100%",
+    color: "#999",
+    fontSize: 14,
   },
 });

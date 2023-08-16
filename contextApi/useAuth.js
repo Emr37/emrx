@@ -39,7 +39,7 @@ const AuthProvider = ({ children }) => {
     };
 
     return (
-        <UseAuth.Provider value={{ isAuth, setIsAuth, authControl, logout, user, login }}>
+        <UseAuth.Provider value={{ isAuth, setIsAuth, authControl, logout, user, setUser, login }}>
             {children}
         </UseAuth.Provider>
     )
